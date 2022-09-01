@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using src.Models;
 
+using Microsoft.EntityFrameworkCore;
+using src.Persistence;
+
 namespace src.Controllers;
 
 [ApiController]
@@ -8,33 +11,48 @@ namespace src.Controllers;
 public class PessoaController : ControllerBase 
 {
 
-    [HttpGet]
-    public Pessoa Get()
-    {
-        Pessoa pessoa = new Pessoa("Rudolf", 42, "12345678901");
-        Contrato novoContrato = new Contrato("abc123", 50.67);
-        
-        pessoa.Contratos.Add(novoContrato);
+    private DatabaseContext _context { get; set; }
 
-        return pessoa;
+    public PessoaController(DatabaseContext context)
+    {
+        this._context = context;
+    }
+
+    [HttpGet]
+    public List<Pessoa> Get()
+    {
+        return _context.Pessoas.Include(p => p.Contratos).ToList();
     }
 
     [HttpPost]
     public Pessoa Post([FromBody] Pessoa pessoa)
     {
+        _context.Pessoas.Add(pessoa);
+        _context.SaveChanges();
+
         return pessoa;
     }
 
     [HttpPut("{id}")]
     public string Update([FromRoute] int id, [FromBody] Pessoa pessoa) 
     {
-        Console.WriteLine("Dados do id " + id + " atualizados");
-        Console.WriteLine(pessoa);
+        _context.Pessoas.Update(pessoa);
+        _context.SaveChanges();
+        
         return "Dados do id " + id + " atualizados";
     }
 
     [HttpDelete("{id}")]
     public string Delete([FromRoute] int id) {
+        var result = _context.Pessoas.SingleOrDefault(e => e.Id == id);
+
+        if (result != null) {
+            _context.Pessoas.Remove(result);
+            _context.SaveChanges();
+        } else {
+            return "Pessoa com id " + id + " não encontrada";
+        }
+
         return "Deletado pessoa de id " + id;
     }
 

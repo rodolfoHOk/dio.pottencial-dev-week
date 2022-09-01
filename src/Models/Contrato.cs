@@ -19,6 +19,8 @@ public class Contrato
         this.Pago = false;
     }
 
+    public int Id { get; set; }
+
     public DateTime DataCriacao { get; set; }
 
     public string TokenID { get; set; }
@@ -26,5 +28,7 @@ public class Contrato
     public double Valor { get; set; }
 
     public bool Pago { get; set; }
+
+    public int PessoaId { get; set; }
     
 }
