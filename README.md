@@ -30,7 +30,17 @@
 
 - adicionar In Memory DB ao projeto: dotnet add package Microsoft.EntityFrameworkCore.InMemory
 
-### Links úteis
+## Extensões para o vscode
+
+- .NET Install Tool for Extension Authors (Microsoft)
+
+- C# (Microsoft)
+
+- C# Extensions (JosKreativ)
+
+- C# Snippets (Jorge Serrano)
+
+## Links úteis
 
 - https://dotnet.microsoft.com/en-us/download
 
